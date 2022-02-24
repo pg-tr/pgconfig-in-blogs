@@ -1,6 +1,6 @@
-# Pharmacy
+# 
+PostgresBlockCrawling 
 
-Basit bir eczane rest apisi. Database tabloları src dosyasının içindeki database klasöründe. 
-## Nasıl Çalıştırılır
+## How to run
 `mvn clean spring-boot:run"` 
 
