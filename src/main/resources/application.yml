@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  error:
+    include-message: ALWAYS
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pharmacy
+    username: atesel
+    password: atesel123
+    platform: postgresql
+    initialize: false
+    continue-on-error: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    generate-ddl: false
+    show-sql: true
+    properties:
+      hibernate:
+        use_sql_comments: false
+        format_sql: true
+        globally_quoted_identifiers: false
+        id.new_generator_mappings: true
+
+logging:
+  level:  #levels: OFF < FATAL < ERROR < WARN < INFO < DEBUG < TRACE < ALL
+    root: INFO
+    com.smartblocktechnology.api: TRACE
+    springfox: INFO
+  pattern:
+    console: "%d{HH:mm:ss} %-5p %c{1}:%L - %m%n"
+
+springdoc:
+  api-docs:
+    enabled:  true
+    path:  /rest-api-docs
+  swagger-ui:
+    path:  /swagger-ui
+
+
+swagger:
+  app:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'
+    buildTime: '@timestamp@'
+    
