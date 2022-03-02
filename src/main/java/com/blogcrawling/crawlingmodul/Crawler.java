@@ -17,6 +17,14 @@ public class Crawler {
 	private HashSet<String> urls;
 
 	private Integer count = 0;
+	private String bodyContent;
+	private String[] postgresParamArray = { "wal_level", "fsync", "synchronous_commit", "wal_sync_method",
+			"full_page_writes", "wal_log_hints", "wal_compression", "wal_init_zero", "wal_recycle", "wal_buffers",
+			"wal_writer_delay", "wal_writer_flush_after", "wal_skip_threshold", "commit_delay", "commit_siblings",
+			"checkpoint_timeout", "checkpoint_completion_target", "checkpoint_flush_after", "checkpoint_warning",
+			"min_wal_size", "archive_mode", "archive_command", "archive_timeout", "restore_command",
+			"archive_cleanup_command", "recovery_end_command", "recovery_target = 'immediate'", "recovery_target_name",
+			"recovery_target_time", "recovery_target_lsn", "recovery_target_xid" };
 
 	public Crawler() {
 		urls = new HashSet<String>();
@@ -34,19 +42,26 @@ public class Crawler {
 
 				Elements linksOnPage = htmlDocument.select("a[href]");
 
-//				String bodyText = htmlDocument.body().text();
-//
-//				if (bodyText.toLowerCase().contains(postgresParam.toLowerCase())) {
-//					System.out.println(">>>>>> Found: " + " [" + postgresParam + "]" + " [" + url + "]");
-//				}
+				bodyContent = htmlDocument.body().text();
+				String title = htmlDocument.title();
 
-				count++;
+				searchParameters(url, title);
+
+				// count++;
 
 				for (Element link : linksOnPage) {
 					crawl(baseUrl, link.absUrl("href"), postgresParam);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+	}
+
+	private void searchParameters(String URL, String Title) {
+		for (String param : postgresParamArray) {
+			if (bodyContent.toLowerCase().contains(param.toLowerCase())) {
+				System.out.println(">>>>>> Found: " + " [" + param + "]" + " [" + URL + "]" + " [" + Title + "]");
 			}
 		}
 	}
