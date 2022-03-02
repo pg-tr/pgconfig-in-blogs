@@ -1,8 +1,6 @@
 package com.blogcrawling.crawlingmodul;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -16,19 +14,18 @@ import lombok.Data;
 public class Crawler {
 
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
-	private List<String> links = new LinkedList<String>();
-	private Document htmlDoc;
-
 	private HashSet<String> urls;
+
+	private Integer count = 0;
 
 	public Crawler() {
 		urls = new HashSet<String>();
 	}
 
-	public void crawl(String baseUrl, String url, Integer depth, String postgresParam) {
+	public void crawl(String baseUrl, String url, String postgresParam) {
 		if (!urls.contains(url) && url.startsWith(baseUrl)) {
 
-			System.out.println(">> Depth: " + depth + " [" + url + "]");
+			// System.out.println(">> count: " + count + " [" + url + "]");
 			urls.add(url);
 
 			try {
@@ -37,16 +34,19 @@ public class Crawler {
 
 				Elements linksOnPage = htmlDocument.select("a[href]");
 
-				String bodyText = htmlDocument.body().text();
+//				String bodyText = htmlDocument.body().text();
+//
+//				if (bodyText.toLowerCase().contains(postgresParam.toLowerCase())) {
+//					System.out.println(">>>>>> Found: " + " [" + postgresParam + "]" + " [" + url + "]");
+//				}
 
-				if (bodyText.toLowerCase().contains(postgresParam.toLowerCase())) {
-					System.out.println(">>>>>> Found: " + " [" + postgresParam + "]" + " [" + url + "]");
-				}
+				count++;
 
 				for (Element link : linksOnPage) {
-					crawl(baseUrl, link.absUrl("href"), depth, postgresParam);
+					crawl(baseUrl, link.absUrl("href"), postgresParam);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

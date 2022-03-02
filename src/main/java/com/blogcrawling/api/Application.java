@@ -17,7 +17,7 @@ public class Application {
 	public static void main(String[] args) throws ClassNotFoundException {
 		//SpringApplication.run(Application.class, args);
 		ParameterSearch crawling = new ParameterSearch();
-		crawling.search("https://gurjeet.singh.im/blog/", "Postgres Hibernator");
+		crawling.search("https://planet.postgresql.org/feeds.html", "Postgres Hibernator");
 	}
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
