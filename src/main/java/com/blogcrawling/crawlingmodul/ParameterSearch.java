@@ -6,14 +6,13 @@ import java.util.List;
 public class ParameterSearch {
 
 	public void search(String url, String postgresParam) {
+		// SearchModule searchModule = new SearchModule();
+
 		Crawler crawler = new Crawler();
-		List<String> findUrls = new LinkedList<String>();
+		crawler.findAllUrls(url, url, 0, postgresParam);
 
-		findUrls = crawler.searchParam(url, postgresParam);
+		System.out.println(">> Finished searching: " + " [" + url + "]");
 
-		for (String str : findUrls) {
-			System.out.println(str);
-		}
+		// searchModule.seach(url, postgresParam);
 	}
-
 }
