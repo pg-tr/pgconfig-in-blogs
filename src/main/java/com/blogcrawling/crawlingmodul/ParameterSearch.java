@@ -26,20 +26,28 @@ public class ParameterSearch {
 			Elements linksOnPage = htmlDocument.select("a[href]");
 
 			for (Element link : linksOnPage) {
-				poolList.add(link.absUrl("href"));
+				String absUrl = link.absUrl("href");
+				String[] parts = absUrl.split("/");
+				String output = parts[0] + "//" + parts[1] + parts[2];
+				poolList.add(output);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		System.out.println(poolList.size());
-
 		for (String link : poolList) {
 			System.out.println(">> Started searching: " + " [" + link + "]");
-			Crawler crawler = new Crawler();
-			crawler.crawl(link, link, postgresParam);
-			System.out.println(">> Finished searching: " + " [" + link + "]");
+
 		}
+
+		System.out.println(poolList.size());
+
+//		for (String link : poolList) {
+//			System.out.println(">> Started searching: " + " [" + link + "]");
+//			Crawler crawler = new Crawler();
+//			crawler.crawl(link, link, postgresParam);
+//			System.out.println(">> Finished searching: " + " [" + link + "]");
+//		}
 	}
 }
