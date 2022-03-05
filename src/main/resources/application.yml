@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/pharmacy
+    url: jdbc:postgresql://localhost:5432/postgresqlblogcrawling
     username: atesel
     password: atesel123
     platform: postgresql

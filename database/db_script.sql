@@ -1,12 +1,9 @@
-CREATE TABLE company(
-	id serial primary key,
-	name varchar(50) not null
-);
+CREATE DATABASE postgresqlBlogCrawling;
 
-CREATE TABLE medicine(
-	id serial PRIMARY KEY,
-	name varchar(50) NOT NULL,
-	desciption text,
-	company_id integer NOT NULL REFERENCES company(id)
+CREATE TABLE blog(
+	param varchar(60) NOT NULL,
+	blog_url text NOT NULL,
+	blog_title text NOT NULL,
+	PRIMARY KEY( param, blog_url)
 );
 
