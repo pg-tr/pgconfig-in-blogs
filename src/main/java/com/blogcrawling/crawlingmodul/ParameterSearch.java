@@ -7,7 +7,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
+import com.blogcrawling.api.domain.Blog;
+
+@Component
 public class ParameterSearch {
 
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
@@ -17,7 +21,7 @@ public class ParameterSearch {
 		poolList = new HashSet<String>();
 	}
 
-	public void search(String url, String postgresParam) {
+	public HashSet<Blog> search(String url, String postgresParam) {
 
 		try {
 			Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
@@ -36,12 +40,21 @@ public class ParameterSearch {
 			e.printStackTrace();
 		}
 
-		for (String link : poolList) {
-			System.out.println(">> Started searching: " + " [" + link + "]");
+		System.out.println("Pool list size = " + poolList.size());
 
-		}
+		Crawler crawler = new Crawler();
+		crawler.crawl("https://gurjeet.singh.im/blog", "https://gurjeet.singh.im/blog", postgresParam);
 
-		System.out.println(poolList.size());
+		HashSet<Blog> blogAndParams = crawler.getBlogs();
+
+		return blogAndParams;
+
+//		for (Blog blog : searchedUrls) {
+//
+//			System.out.println(">>>>>> Found: " + " [" + blog.getTitle() + "]" + " [" + blog.getIdentity().getParam()
+//					+ "]" + " [" + blog.getIdentity().getUrl() + "]");
+//
+//		}
 
 //		for (String link : poolList) {
 //			System.out.println(">> Started searching: " + " [" + link + "]");

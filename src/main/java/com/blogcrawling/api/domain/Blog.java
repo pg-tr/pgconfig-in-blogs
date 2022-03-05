@@ -14,10 +14,10 @@ public class Blog {
 	@EmbeddedId
 	BlogIdentity identity;
 
-	String title;
+	String blogTitle;
 
-	public Blog(BlogIdentity identity, String title) { 
+	public Blog(BlogIdentity identity, String blogTitle) { 
 		this.identity = identity;
-		this.title = title;
+		this.blogTitle = blogTitle;
 	}
 }

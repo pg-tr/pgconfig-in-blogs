@@ -9,15 +9,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import com.blogcrawling.crawlingmodul.ParameterSearch;
-
 @SpringBootApplication
 public class Application {
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		//SpringApplication.run(Application.class, args);
-		ParameterSearch crawling = new ParameterSearch();
-		crawling.search("https://planet.postgresql.org/feeds.html", "Postgres Hibernator");
+		SpringApplication.run(Application.class, args);
 	}
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());

@@ -7,14 +7,23 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.blogcrawling.api.domain.Blog;
+import com.blogcrawling.api.domain.BlogIdentity;
+import com.blogcrawling.api.repository.BlogRepository;
 
 import lombok.Data;
 
 @Data
 public class Crawler {
 
+	@Autowired
+	BlogRepository blogRepository;
+
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 	private HashSet<String> urls;
+	private HashSet<Blog> blogs;
 
 	private Integer count = 0;
 	private String bodyContent;
@@ -28,12 +37,12 @@ public class Crawler {
 
 	public Crawler() {
 		urls = new HashSet<String>();
+		blogs = new HashSet<Blog>();
 	}
 
 	public void crawl(String baseUrl, String url, String postgresParam) {
 		if (!urls.contains(url) && url.startsWith(baseUrl)) {
 
-			// System.out.println(">> count: " + count + " [" + url + "]");
 			urls.add(url);
 
 			try {
@@ -47,8 +56,6 @@ public class Crawler {
 
 				searchParameters(url, title);
 
-				// count++;
-
 				for (Element link : linksOnPage) {
 					crawl(baseUrl, link.absUrl("href"), postgresParam);
 				}
@@ -58,10 +65,17 @@ public class Crawler {
 		}
 	}
 
-	private void searchParameters(String URL, String Title) {
+	private void searchParameters(String URL, String title) {
 		for (String param : postgresParamArray) {
 			if (bodyContent.toLowerCase().contains(param.toLowerCase())) {
-				System.out.println(">>>>>> Found: " + " [" + param + "]" + " [" + URL + "]" + " [" + Title + "]");
+
+				BlogIdentity blogIdentity = new BlogIdentity(param, URL);
+
+				Blog newBlogEntry = new Blog(blogIdentity, title);
+
+				blogs.add(newBlogEntry);
+
+				System.out.println(">>>>>> Found: " + " [" + param + "]" + " [" + URL + "]" + " [" + title + "]");
 			}
 		}
 	}

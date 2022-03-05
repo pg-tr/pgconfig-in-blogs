@@ -11,6 +11,8 @@ spring:
     platform: postgresql
     initialize: false
     continue-on-error: false
+  batch:
+    initialize-schema: always
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     generate-ddl: false
