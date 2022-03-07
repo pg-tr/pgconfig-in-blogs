@@ -1,4 +1,4 @@
-package com.blogcrawling.api.configuration;
+package com.blogcrawling.api.batchconfigurationlistener;
 
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;

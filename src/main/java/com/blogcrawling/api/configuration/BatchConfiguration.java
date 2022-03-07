@@ -18,7 +18,10 @@ import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DuplicateKeyException;
 
+import com.blogcrawling.api.batchconfigurationlistener.ItemSkipPolicy;
+import com.blogcrawling.api.batchconfigurationlistener.JobCompletionNotificationListener;
 import com.blogcrawling.api.domain.Blog;
 import com.blogcrawling.crawlingmodul.ParameterSearch;
 
@@ -60,6 +63,9 @@ public class BatchConfiguration {
 		return stepBuilderFactory.get("step1")
 				.<Blog, Blog>chunk(10)
 				.reader(reader())
-				.writer(writer).build();
+				.writer(writer).faultTolerant()
+				.skip(DuplicateKeyException.class)
+				.skipPolicy(new ItemSkipPolicy())
+				.build();
 	}
 }
