@@ -54,11 +54,18 @@ public class Crawler {
 				bodyContent = htmlDocument.body().text();
 				String title = htmlDocument.title();
 
-				searchParameters(url, title);
+				System.out.println("started [" + url + "]");
+				
+				if (connection.response().contentType().contains("text/html")) {
+					searchParameters(url, title);
 
-				for (Element link : linksOnPage) {
-					crawl(baseUrl, link.absUrl("href"), postgresParam);
+					for (Element link : linksOnPage) {
+						crawl(baseUrl, link.absUrl("href"), postgresParam);
+					}
+				} else {
+					System.out.println("Skipped [" + url + "] because it is not a html template.");
 				}
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
