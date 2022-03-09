@@ -13,6 +13,8 @@ spring:
     continue-on-error: false
   batch:
     initialize-schema: always
+    job:
+      enabled: false
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     generate-ddl: false

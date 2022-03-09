@@ -21,8 +21,8 @@ public class ParameterSearch {
 		poolList = new HashSet<String>();
 	}
 
-	public HashSet<Blog> search(String url, String postgresParam) {
-
+	public HashSet<Blog> search(String url) {
+		System.out.println("seacrh");
 		try {
 			Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
 			Document htmlDocument = connection.get();
@@ -42,25 +42,21 @@ public class ParameterSearch {
 
 		System.out.println("Pool list size = " + poolList.size());
 
-		Crawler crawler = new Crawler();
-		crawler.crawl("https://gurjeet.singh.im/blog", "https://gurjeet.singh.im/blog", postgresParam);
+		HashSet<Blog> blogAndParams = new HashSet<Blog>();
 
-		HashSet<Blog> blogAndParams = crawler.getBlogs();
+		String[] pollArray = new String[poolList.size()];
+		poolList.toArray(pollArray);
+
+		for (String link : poolList) {
+			System.out.println(">> Started searching: " + " [" + link + "]");
+			Crawler crawler = new Crawler();
+			crawler.crawl(link, link);
+			HashSet<Blog> tmp = crawler.getBlogs();
+			blogAndParams.addAll(tmp);
+			System.out.println(">> Finished searching: " + " [" + link + "]");
+		}
 
 		return blogAndParams;
 
-//		for (Blog blog : searchedUrls) {
-//
-//			System.out.println(">>>>>> Found: " + " [" + blog.getTitle() + "]" + " [" + blog.getIdentity().getParam()
-//					+ "]" + " [" + blog.getIdentity().getUrl() + "]");
-//
-//		}
-
-//		for (String link : poolList) {
-//			System.out.println(">> Started searching: " + " [" + link + "]");
-//			Crawler crawler = new Crawler();
-//			crawler.crawl(link, link, postgresParam);
-//			System.out.println(">> Finished searching: " + " [" + link + "]");
-//		}
 	}
 }

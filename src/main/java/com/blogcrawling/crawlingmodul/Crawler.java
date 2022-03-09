@@ -1,9 +1,12 @@
 package com.blogcrawling.crawlingmodul;
 
+import java.net.SocketTimeoutException;
 import java.util.HashSet;
 
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -40,7 +43,7 @@ public class Crawler {
 		blogs = new HashSet<Blog>();
 	}
 
-	public void crawl(String baseUrl, String url, String postgresParam) {
+	public void crawl(String baseUrl, String url) {
 		if (!urls.contains(url) && url.startsWith(baseUrl)) {
 
 			urls.add(url);
@@ -54,17 +57,25 @@ public class Crawler {
 				bodyContent = htmlDocument.body().text();
 				String title = htmlDocument.title();
 
-				System.out.println("started [" + url + "]");
-				
-				if (connection.response().contentType().contains("text/html")) {
+				if (connection.response().statusCode() == 200
+						&& connection.response().contentType().contains("text/html")) {
 					searchParameters(url, title);
 
 					for (Element link : linksOnPage) {
-						crawl(baseUrl, link.absUrl("href"), postgresParam);
+						if (!link.absUrl("href").endsWith("txt") && !link.absUrl("href").endsWith("pdf")
+								&& !link.absUrl("href").endsWith("xml"))
+							crawl(baseUrl, link.absUrl("href"));
 					}
+
 				} else {
 					System.out.println("Skipped [" + url + "] because it is not a html template.");
 				}
+
+			} catch (UnsupportedMimeTypeException e) {
+
+			} catch (HttpStatusException e) {
+
+			} catch (SocketTimeoutException e) {
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -76,9 +87,13 @@ public class Crawler {
 		for (String param : postgresParamArray) {
 			if (bodyContent.toLowerCase().contains(param.toLowerCase())) {
 
-				BlogIdentity blogIdentity = new BlogIdentity(param, URL);
+				BlogIdentity blogIdentity = new BlogIdentity();
+				blogIdentity.setBlog_url(URL);
+				blogIdentity.setParam(param);
 
-				Blog newBlogEntry = new Blog(blogIdentity, title);
+				Blog newBlogEntry = new Blog();
+				newBlogEntry.setBlogTitle(title);
+				newBlogEntry.setIdentity(blogIdentity);
 
 				blogs.add(newBlogEntry);
 

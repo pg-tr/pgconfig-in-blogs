@@ -10,6 +10,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -36,26 +37,27 @@ public class BatchConfiguration {
 	public StepBuilderFactory stepBuilderFactory;
 
 	@Bean
+	@StepScope
 	public ListItemReader<Blog> reader() {
 		ParameterSearch crawling = new ParameterSearch();
-		HashSet<Blog> blogSet = crawling.search("https://planet.postgresql.org/feeds.html", "Postgres Hibernator");
-
+		HashSet<Blog> blogSet = crawling.search("https://planet.postgresql.org/feeds.html");
+		System.out.println(blogSet.size());
 		return new ListItemReader<Blog>(new ArrayList<Blog>(blogSet));
 	}
 
 	@Bean
+	@StepScope
 	public JdbcBatchItemWriter<Blog> writer(DataSource dataSource) {
 		return new JdbcBatchItemWriterBuilder<Blog>()
 				.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Blog>())
-				.sql("INSERT INTO blog (param, blog_url, blog_title) VALUES (:identity.param,:identity.url, :blogTitle)")
+				.sql("INSERT INTO blog (param, blog_url, blog_title) VALUES (:identity.param,:identity.blog_url, :blogTitle)")
 				.dataSource(dataSource).build();
 	}
 
 	@Bean
-	public Job importUserJob(JobCompletionNotificationListener listener, Step step1) {
-		return jobBuilderFactory.get("importUserJob")
-				.incrementer(new RunIdIncrementer()).listener(listener).flow(step1)
-				.end().build();
+	public Job importCrawlingBatch(JobCompletionNotificationListener listener, Step step1) {
+		return jobBuilderFactory.get("importCrawlingBatch").incrementer(new RunIdIncrementer()).listener(listener)
+				.flow(step1).end().build();
 	}
 
 	@Bean

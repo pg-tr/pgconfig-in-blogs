@@ -9,5 +9,4 @@ public class ItemSkipPolicy implements SkipPolicy {
 	public boolean shouldSkip(Throwable t, int skipCount) throws SkipLimitExceededException {
 		return true;
 	}
-
 }

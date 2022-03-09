@@ -12,13 +12,13 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 	public void beforeJob(JobExecution jobExecution) {
 		super.beforeJob(jobExecution);
 
-		System.out.println(">>> CRAWLING STARTED <<<");
+		System.out.println(">>> BATCH CRAWLING STARTED <<<");
 	}
 
 	@Override
 	public void afterJob(JobExecution jobExecution) {
 		if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-			System.out.println(">>> CRAWLING FINISHED <<<");
+			System.out.println(">>> BATCH  CRAWLING FINISHED <<<");
 		}
 	}
 

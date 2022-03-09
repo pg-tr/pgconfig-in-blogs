@@ -2,7 +2,6 @@ package com.blogcrawling.api.repository;
 
 import java.util.List;
 
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
