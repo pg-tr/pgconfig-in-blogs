@@ -17,10 +17,5 @@ public class BlogIdentity implements Serializable {
 	String param;
 
 	@NotBlank
-	String url;
-
-	public BlogIdentity(String param, String url) {
-		this.param = param;
-		this.url = url;
-	}
+	String blog_url;
 }

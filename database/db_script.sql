@@ -7,3 +7,5 @@ CREATE TABLE blog(
 	PRIMARY KEY( param, blog_url)
 );
 
+CREATE INDEX on blog USING btree (param);
+

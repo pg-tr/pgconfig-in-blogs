@@ -15,9 +15,4 @@ public class Blog {
 	BlogIdentity identity;
 
 	String blogTitle;
-
-	public Blog(BlogIdentity identity, String blogTitle) { 
-		this.identity = identity;
-		this.blogTitle = blogTitle;
-	}
 }
