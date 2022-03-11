@@ -22,7 +22,6 @@ public class ParameterSearch {
 	}
 
 	public HashSet<Blog> search(String url) {
-		System.out.println("seacrh");
 		try {
 			Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
 			Document htmlDocument = connection.get();
@@ -40,7 +39,7 @@ public class ParameterSearch {
 			e.printStackTrace();
 		}
 
-		System.out.println("Pool list size = " + poolList.size());
+		System.out.println(">> Pool list size = " + poolList.size());
 
 		HashSet<Blog> blogAndParams = new HashSet<Blog>();
 
