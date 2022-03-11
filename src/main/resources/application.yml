@@ -29,7 +29,7 @@ spring:
 logging:
   level:  #levels: OFF < FATAL < ERROR < WARN < INFO < DEBUG < TRACE < ALL
     root: INFO
-    com.smartblocktechnology.api: TRACE
+    com.blogcrawling.api: TRACE
     springfox: INFO
   pattern:
     console: "%d{HH:mm:ss} %-5p %c{1}:%L - %m%n"
