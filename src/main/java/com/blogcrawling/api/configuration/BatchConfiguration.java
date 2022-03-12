@@ -41,7 +41,6 @@ public class BatchConfiguration {
 	public ListItemReader<Blog> reader() {
 		ParameterSearch crawling = new ParameterSearch();
 		HashSet<Blog> blogSet = crawling.search("https://planet.postgresql.org/feeds.html");
-		System.out.println(blogSet.size());
 		return new ListItemReader<Blog>(new ArrayList<Blog>(blogSet));
 	}
 

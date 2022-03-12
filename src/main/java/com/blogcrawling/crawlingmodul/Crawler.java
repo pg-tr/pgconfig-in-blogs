@@ -1,6 +1,9 @@
 package com.blogcrawling.crawlingmodul;
 
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashSet;
 
 import org.jsoup.Connection;
@@ -44,8 +47,7 @@ public class Crawler {
 	}
 
 	public void crawl(String baseUrl, String url) {
-		if (!urls.contains(url) && url.startsWith(baseUrl)) {
-
+		if (!urls.contains(url) && url.startsWith(baseUrl) && !url.contains("facebook") && !url.contains("twitter")) {
 			urls.add(url);
 
 			try {
@@ -62,8 +64,7 @@ public class Crawler {
 					searchParameters(url, title);
 
 					for (Element link : linksOnPage) {
-						if (!link.absUrl("href").endsWith("txt") && !link.absUrl("href").endsWith("pdf")
-								&& !link.absUrl("href").endsWith("xml"))
+						if (isUrlQuilified(link))
 							crawl(baseUrl, link.absUrl("href"));
 					}
 
@@ -81,6 +82,26 @@ public class Crawler {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private boolean isUrlQuilified(Element link) {
+		try {
+			URL obj = new URL(link.absUrl("href"));
+			obj.toURI();
+			if (!link.absUrl("href").endsWith("txt") 
+					&& !link.absUrl("href").endsWith("pdf") 
+					&& !link.absUrl("href").endsWith("png")
+					&& !link.absUrl("href").endsWith("xml")
+					&& !link.absUrl("href").endsWith("jpeg")
+				) {
+				return true;
+			}
+		} catch (MalformedURLException e) {
+			return false;
+		} catch (URISyntaxException e) {
+			return false;
+		}
+		return false;
 	}
 
 	private void searchParameters(String URL, String title) {
