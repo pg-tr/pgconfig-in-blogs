@@ -19,7 +19,7 @@ public class MainController {
 	@Autowired
 	ParameterService service;
 
-	@GetMapping("getbypostgresqlparam/{param}")
+	@GetMapping("blogs/{param}")
 	public ResponseEntity<List<Blog>> getByParam(@PathVariable(name = "param", required = true) String param) {
 		return ResponseEntity.ok().body(service.getBlogByParam(param));
 	}
