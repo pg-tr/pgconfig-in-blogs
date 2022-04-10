@@ -12,6 +12,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.skip.NonSkippableReadException;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
@@ -61,12 +62,7 @@ public class BatchConfiguration {
 
 	@Bean
 	public Step step1(JdbcBatchItemWriter<Blog> writer) {
-		return stepBuilderFactory.get("step1")
-				.<Blog, Blog>chunk(10)
-				.reader(reader())
-				.writer(writer).faultTolerant()
-				.skip(DuplicateKeyException.class)
-				.skipPolicy(new ItemSkipPolicy())
-				.build();
+		return stepBuilderFactory.get("step1").<Blog, Blog>chunk(10).reader(reader()).writer(writer).faultTolerant()
+				.skip(DuplicateKeyException.class).skipPolicy(new ItemSkipPolicy()).build();
 	}
 }

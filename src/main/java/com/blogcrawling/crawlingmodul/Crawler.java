@@ -66,15 +66,13 @@ public class Crawler {
 				String title = htmlDocument.title();
 
 				currectDept++;
-				System.out.println("Current Depth  " + currectDept);
+				//System.out.println("Current Depth  " + currectDept);
 				if (connection.response().statusCode() == 200
 						&& connection.response().contentType().contains("text/html")) {
 					searchParameters(url, title);
 
 					for (Element link : linksOnPage) {
-						System.out.println("link " + link);
 						if (isUrlQuilified(link)) {
-							System.out.println("link " + link.absUrl("href"));
 							crawl(baseUrl, link.absUrl("href"));
 						}
 					}
@@ -91,7 +89,10 @@ public class Crawler {
 				System.out.println("Connection error.");
 			} catch (IOException e) {
 				System.out.println("Underlying input stream returned zero bytes ");
-			} catch (Exception e) {
+			} catch( NullPointerException e) {
+				
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -128,7 +129,7 @@ public class Crawler {
 
 				blogs.add(newBlogEntry);
 
-				System.out.println(">>>>>> Found: " + " [" + param + "]" + " [" + URL + "]" + " [" + title + "]");
+				//System.out.println(">>>>>> Found: " + " [" + param + "]" + " [" + URL + "]" + " [" + title + "]");
 			}
 		}
 	}

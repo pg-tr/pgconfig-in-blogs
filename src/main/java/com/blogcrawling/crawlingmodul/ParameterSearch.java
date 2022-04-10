@@ -30,9 +30,7 @@ public class ParameterSearch {
 
 			for (Element link : linksOnPage) {
 				String absUrl = link.absUrl("href");
-				String[] parts = absUrl.split("/");
-				String output = parts[0] + "//" + parts[1] + parts[2];
-				poolList.add(output);
+				poolList.add(absUrl);
 			}
 
 		} catch (Exception e) {
