@@ -1,5 +1,6 @@
 package com.blogcrawling.crawlingmodul;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
@@ -30,6 +31,7 @@ public class Crawler {
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 	private HashSet<String> urls;
 	private HashSet<Blog> blogs;
+	private static final Integer MAX_DEPTH = 1500;
 
 	private Integer count = 0;
 	private String bodyContent;
@@ -41,13 +43,17 @@ public class Crawler {
 			"archive_cleanup_command", "recovery_end_command", "recovery_target = 'immediate'", "recovery_target_name",
 			"recovery_target_time", "recovery_target_lsn", "recovery_target_xid" };
 
+	private Integer currectDept;
+
 	public Crawler() {
 		urls = new HashSet<String>();
 		blogs = new HashSet<Blog>();
+		currectDept = 0;
 	}
 
 	public void crawl(String baseUrl, String url) {
-		if (!urls.contains(url) && url.startsWith(baseUrl) && !url.contains("facebook") && !url.contains("twitter")) {
+		if (!urls.contains(url) && currectDept < MAX_DEPTH && url.startsWith(baseUrl) && !url.contains("facebook")
+				&& !url.contains("twitter")) {
 			urls.add(url);
 
 			try {
@@ -59,13 +65,18 @@ public class Crawler {
 				bodyContent = htmlDocument.body().text();
 				String title = htmlDocument.title();
 
+				currectDept++;
+				System.out.println("Current Depth  " + currectDept);
 				if (connection.response().statusCode() == 200
 						&& connection.response().contentType().contains("text/html")) {
 					searchParameters(url, title);
 
 					for (Element link : linksOnPage) {
-						if (isUrlQuilified(link))
+						System.out.println("link " + link);
+						if (isUrlQuilified(link)) {
+							System.out.println("link " + link.absUrl("href"));
 							crawl(baseUrl, link.absUrl("href"));
+						}
 					}
 
 				} else {
@@ -73,11 +84,13 @@ public class Crawler {
 				}
 
 			} catch (UnsupportedMimeTypeException e) {
-
+				System.out.println("Unspported madia type.");
 			} catch (HttpStatusException e) {
-
+				System.out.println("Connection error.");
 			} catch (SocketTimeoutException e) {
-
+				System.out.println("Connection error.");
+			} catch (IOException e) {
+				System.out.println("Underlying input stream returned zero bytes ");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -88,12 +101,9 @@ public class Crawler {
 		try {
 			URL obj = new URL(link.absUrl("href"));
 			obj.toURI();
-			if (!link.absUrl("href").endsWith("txt") 
-					&& !link.absUrl("href").endsWith("pdf") 
-					&& !link.absUrl("href").endsWith("png")
-					&& !link.absUrl("href").endsWith("xml")
-					&& !link.absUrl("href").endsWith("jpeg")
-				) {
+			if (!link.absUrl("href").endsWith("txt") && !link.absUrl("href").endsWith("pdf")
+					&& !link.absUrl("href").endsWith("png") && !link.absUrl("href").endsWith("xml")
+					&& !link.absUrl("href").endsWith("jpeg")) {
 				return true;
 			}
 		} catch (MalformedURLException e) {
