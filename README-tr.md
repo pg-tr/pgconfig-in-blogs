@@ -3,18 +3,17 @@
 Bu repo [postgresqlco.nf ](https://postgresqlco.nf/doc/en/param/)'den ilham alınarak yapılmıştır. Blog yazılarında PostgreSQL Server parametrelerini arar, bir blog sayfasında bir parametre bulduğunda, bunu parametre, blog başlığı ve blog bağlantısıyla veritabanına yazar. Web servisi üzerinden parametre ile sorulduğunda JSON belgeleri olarak döndürür.
 
 Bu servis 2 farklı modül içerir.
-* Birincisi, belirli bir havuzdan blog URL'lerinin değerlerini alan ve özyineleyerek bloga erişir ve içinde PostgreSQL parametrelerinden biri veya birden fazlası varsa   üzerinden geçer ve veritabanına yazılmışsa, PostgreSQL parametrelerini arar.
-* İkincisi, PostgreSQL parametrelerini alan ve istendiğinde ilgili blog yazılarını döndüren dinlendirici bir API'dir.
+* Birincisi, belirli bir havuzdan blog URL'lerinin değerlerini alır ve bloga erişir ve içinde PostgreSQL parametrelerinden biri veya birden fazlası varsa veritabanına yazar.
+* İkincisi, PostgreSQL parametrelerini GET isteği ile alan ve ilgili blog yazılarını JSON olarak dönen bir API'dir.
 
-## Blog Paletli
-Paletli modülü bir cron planlanmış ilkbahar parti işidir. Çaldığında havuza gider ve tüm blog sitelerini çeker. Sonra bu siteleri yineleyin ve özyinelemeli, derinlere gidin ve PostgreSQL parametresini arayın. Arama yapıldıktan sonra, Blog sitesi URL'si, PostgreSQL parametresini ve postanın başlığını veritabanına yazar. Bu iki işlem, gerdirme API'si değil, toplu işler olarak çalışır. Donanım kapasitesi nedeniyle, tarama derinlik sınırlıdır.
+## Blog Crawling
+Crawling modülü bir spring batch işlemidir. Çalıştığında havuzdan listeyi çeker ve tüm blog sitelerini gezer ve PostgreSQL parametrelerini arar. Arama yapıldıktan sonra, Blog sitesi URL'si, PostgreSQL parametresini ve blogun başlığını veritabanına yazar. Donanım kapasitesi nedeniyle, tarama derinliği sınırlanmıştır.
 
-### ayar cron config
+### cron config
 
-Cron konfigürasyonu veritabanında tutulur. Uygulama oluşturduğunda veritabanına gider ve CRON yapılandırmasını alır. Her çalıştırıldıktan sonra, veritabanına gider ve Cron Config'ü sıfırlar. Böylece her bir yinelemeden sonra CRON Config'ini değiştirebilirsiniz.
+Cron konfigürasyonu veritabanında tutulur. Uygulama ayağa kalktığında veritabanına gider ve CRON yapılandırmasını alır. Her çalıştırıldıktan sonra, veritabanına gider ve Cron Config'i sıfırlar. Böylece her bir çalışmasından sonra cron config'ini değiştirebilirsiniz.
 
-* Cron Config Cron_CONF tablosunda tutar.
-* Satırı 1'e eşit bir tuşla alır. Bu yüzden yeni bir satır eklemeyin, sadece mevcut satırı güncelleyin.
+* Cron Config cron_conf tablosunda tutar.
 <br />
 Örnekler:
 <br />
