@@ -1,6 +1,6 @@
 # PostgreSQL Config Parameters in Blog Sites 
 
-It searches PostgreSQL serve parameters in blog posts, when it finds a parameter in a post, it writes that to the database with the parameter, blog title and blog link. It returns these blog posts as JSON documents when asked with the parameter. 
+This repo is inspired from [postgresqlCO.NF](https://postgresqlco.nf/doc/en/param/). It searches PostgreSQL server parameters in blog posts, when it finds a parameter in a post, it writes that to the database with the parameter, blog title and blog link. It returns these blog posts as JSON documents when asked with the parameter. 
 
 This service contains 2 different modules. The first one is Web Crawler which takes the values of blog URLs from a given pool and recursively goes over the blog and searches for PostgreSQL parameters if found written to the database.  The second one is a Restful API which takes PostgreSQL parameters and returns the related blog posts when asked.
 
