@@ -14,7 +14,6 @@ The crawler module is a cron scheduled Spring Batch Job. When it runs it goes to
 Cron configuration is kept in the database. When the app builds it goes to the database and retrieves the cron configuration. After each run, it goes to the database and resets the cron config. So you can change the cron config after each iteration.
 
 * Cron config keeps in cron_conf table.
-* It retrieves the row with a key equal to 1. So do not add a new row just update the existing row. 
 <br /> 
 Examples:
 <br /> 
