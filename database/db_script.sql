@@ -18,6 +18,8 @@ CREATE TABLE cron_conf(
 	cron_exp text NOT NULL
 );
 
+INSERT INTO cron_conf(cron_exp) VALUES('0 */1 * * * *');
+
 CREATE INDEX on blog USING btree (param);
 CREATE INDEX on jwt_token USING btree (jwt_token);
 
