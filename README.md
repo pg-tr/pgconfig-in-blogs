@@ -34,3 +34,33 @@ The data is crawled and loaded into the database previously. If you want to use 
 ### How to run with Maven
 `mvn clean spring-boot:run`
 
+### Dockerization 
+ 
+ ```Dockerfile
+FROM openjdk:17-jdk-alpine
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app.jar"]
+ ```
+ 
+### docker build
+
+```
+docker build -t <some-name>:<some-tag> .
+```
+ 
+ ### Creating the DB
+ 
+ ```
+ 
+ psql <db_name> < database/db-dump.sql
+ 
+ ```
+ 
+ ### run in the container
+ 
+ ```
+ docker run -e JAVA_OPTS='-Dspring.datasource.url=jdbc:postgresql://<db_host>:<port>/<db_name> -Dspring.datasource.username=<dbusername> -Dspring.datasource.password=<dbpassword>' <image_name>
+ ```
+ 
+ 
